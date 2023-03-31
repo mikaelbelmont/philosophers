@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:12 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/03/24 20:38:46 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/03/31 18:43:30 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,6 @@ void	exit_launcher(t_data *data, t_table *table)
 		pthread_join(table[i].thread_id, NULL);
 	i = -1;
 	while (++i < data->philo_num)
-		pthread_mutex_destroy(&(data->fork[i]));
+		pthread_mutex_destroy(&(data->forks[i]));
 	pthread_mutex_destroy(&(data->writing));
 }
