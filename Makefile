@@ -6,12 +6,12 @@ OBJS = $(SRCS:.c=.o)
 
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra -g -fsanitize=thread
+CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address
 
 LPTHREAD = -lpthread
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LPTHREAD)
+	$(CC) $(LPTHREAD) $(CFLAGS) $(OBJS) -o $(NAME)
 
 all: $(NAME)
 
