@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:09 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/03/31 18:53:37 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/03 17:42:36 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,12 @@ struct s_data
 	
 	pthread_mutex_t	*forks;
 	
-	pthread_mutex_t	*fork_left;
-	pthread_mutex_t	*fork_right;
+	// pthread_mutex_t	*fork_left;
+	// pthread_mutex_t	*fork_right;
+	
+	int				fork_left;
+	int				fork_right;
+
 	pthread_mutex_t	eating;
 	pthread_mutex_t	util;
 	pthread_mutex_t	allate;

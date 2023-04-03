@@ -6,22 +6,31 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:17 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/02 17:21:35 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/03 17:46:43 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	take_fork(t_table *table, int side)
+{
+	pthread_mutex_lock(&table->data.forks[side]);
+	printer(&table->data, table->id, "has taken a fork");
+	pthread_mutex_unlock(&table->data.forks[side]);
+}
 
 void	philo_eat(t_table *table)
 {
 	t_data	data;
 
 	data = table->data;
-	pthread_mutex_lock(data.fork_left);
-	printer(&data, table->id, "has taken a fork");
-	pthread_mutex_lock(data.fork_right);
-	printer(&data, table->id, "has taken a fork");
+	take_fork(table, data.fork_left);
+	// pthread_mutex_lock(&data.forks[0]);
+	// printer(&data, table->id, "has taken a fork");
+	// pthread_mutex_lock(&data.forks[1]);
+	// printer(&data, table->id, "has taken a fork");
 	//pthread_mutex_lock(&(data->eating));
+	take_fork(table, data.fork_right);
 	printer(&data, table->id, "is eating");
 	table->last_meal_t = times();
 	//pthread_mutex_unlock(&(data->eating));
@@ -29,8 +38,8 @@ void	philo_eat(t_table *table)
 	(table->x_ate)++;
 	pthread_mutex_unlock(&(data.util));
 	sleeping(data.eat_time, &data);
-	pthread_mutex_unlock(data.fork_left);
-	pthread_mutex_unlock(data.fork_right);
+	//pthread_mutex_unlock(data.fork_left);
+	//pthread_mutex_unlock(data.fork_right);
 }
 
 void	*philo_thread(void *voidphil)
@@ -104,14 +113,21 @@ void	check_dead(t_data *d, t_table *t)
 	}
 }
 
-void	*onephilo(void *tm_die)
+void	sleeping(long long time, t_data *data)
 {
-	int	*tm_t_die;
+	long long	i;
+	int			death;
 
-	tm_t_die = (int *)tm_die;
-	printf("%d %d has taken a fork\n", 0, 1);
-	printf("%d %d died\n", *tm_t_die, 1);
-	return (NULL);
+	pthread_mutex_lock(&(data->util2));
+	death = data->death;
+	pthread_mutex_unlock(&(data->util2));
+	i = times();
+	while (!(death))
+	{
+		if (time_diff(i, times()) >= time)
+			break ;
+		usleep(50);
+	}
 }
 
 int	work(t_data *data)
@@ -120,12 +136,13 @@ int	work(t_data *data)
 	t_table	*table;
 
 	i = -1;
-	table = 0;
+	table = malloc(sizeof(t_table));
 	data->first_timestamp = times();
 	while (++i < data->philo_num)
 	{
+		printf("%d\n", i);
 		if (pthread_create(&(table[i].thread_id), NULL, \
-		philo_thread, (table + i) ))
+		philo_thread, (table + i)))
 			return (1);
 		pthread_mutex_lock(&(data->eating));
 		table[i].last_meal_t = times();
@@ -133,5 +150,6 @@ int	work(t_data *data)
 	}
 	check_dead(data, table);
 	exit_launcher(data, table);
+	free(table);
 	return (0);
 }
