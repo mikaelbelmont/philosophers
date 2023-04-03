@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:17 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/03/31 18:53:57 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/02 17:21:35 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,6 @@ void	check_dead(t_data *d, t_table *t)
 	}
 }
 
-
-
 void	*onephilo(void *tm_die)
 {
 	int	*tm_t_die;
@@ -121,18 +119,17 @@ int	work(t_data *data)
 	int		i;
 	t_table	*table;
 
-	i = 0;
+	i = -1;
 	table = 0;
 	data->first_timestamp = times();
-	while (i < data->philo_num)
+	while (++i < data->philo_num)
 	{
 		if (pthread_create(&(table[i].thread_id), NULL, \
-		philo_thread, table + i))
+		philo_thread, (table + i) ))
 			return (1);
 		pthread_mutex_lock(&(data->eating));
 		table[i].last_meal_t = times();
 		pthread_mutex_unlock(&(data->eating));
-		i++;
 	}
 	check_dead(data, table);
 	exit_launcher(data, table);

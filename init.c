@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/03/31 18:44:58 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/02 16:41:27 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,9 @@ int	ft_init(t_data *d, int ac, char **av)
 		d->eat_count = -1;
 	if (d->philo_num == 1)
 	{
+		table = malloc(sizeof(t_table));
 		pthread_create(&(table[0].thread_id), NULL, onephilo, &(d->die_time));
-		exit_launcher(d, table);
+		pthread_join(table[0].thread_id, NULL);
 		usleep(500);
 		return (-1);
 	}
