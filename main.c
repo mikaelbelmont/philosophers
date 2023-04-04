@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:14 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/03 22:03:31 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/04 16:30:14 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	main(int ac, char **av)
 	if (ac < 5 || ac > 6)
 	{
 		printf("Wrong number of arguments\n");
-		exit(0);
+		return (0);
 	}
 	while (i > 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:09 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/03 22:04:31 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/04 17:05:38 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void		sleeping(long long time, t_data *data);
 void		printer(t_data *data, int id, char *string);
 void		exit_launcher(t_data *data, t_table *table);
 int			work(t_data *data, t_table *table);
-void		check_dead(t_data *d, t_table *t);
+int			check_dead(t_data *d, t_table *t);
 void		*philo_thread(void *voidphil);
 void		philo_eat(t_table *table);
 void		*onephilo(void *tm_die);

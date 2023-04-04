@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/03 22:56:49 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/04 16:28:38 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,6 @@ t_table	*ft_init(t_data *d, int ac, char **av)
 	if (ft_checker(d, ac) == -1)
 		return (NULL);
 	initmut(d);
-	initphil(table, d);
-	//free(table);
+	table = initphil(table, d);
 	return (table);
 }
