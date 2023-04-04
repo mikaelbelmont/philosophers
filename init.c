@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/03 17:45:27 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/03 22:56:49 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,15 @@ int	ft_checker(t_data *d, int ac)
 	return (-1);
 }
 
-int	initphil(t_table *table, t_data *d)
+t_table	*initphil(t_table *table, t_data *d)
 {
 	int i;
 	
-	i = d->philo_num;
-	table = malloc(sizeof(t_table) * i);
+	i = -1;
+	table = malloc(sizeof(t_table));
 	if (!table)
-		return (-1);
-	while (--i >= 0)
+		return (NULL);
+	while (++i < d->philo_num)
 	{
 		table[i].id = i;
 		table[i].x_ate = 0;
@@ -95,7 +95,7 @@ int	initphil(t_table *table, t_data *d)
 		table[i].last_meal_t = 0;
 		table[i].data = *d;
 	}
-	return (0);
+	return (table);
 }
 
 void	*onephilo(void *tm_die)
@@ -108,7 +108,7 @@ void	*onephilo(void *tm_die)
 	return (NULL);
 }
 
-int	ft_init(t_data *d, int ac, char **av)
+t_table	*ft_init(t_data *d, int ac, char **av)
 {
 	t_table	*table;
 
@@ -129,12 +129,12 @@ int	ft_init(t_data *d, int ac, char **av)
 		pthread_create(&(table[0].thread_id), NULL, onephilo, &(d->die_time));
 		pthread_join(table[0].thread_id, NULL);
 		usleep(500);
-		return (-1);
+		return (NULL);
 	}
 	if (ft_checker(d, ac) == -1)
-		return (-1);
+		return (NULL);
 	initmut(d);
 	initphil(table, d);
-	free(table);
-	return (0);
+	//free(table);
+	return (table);
 }

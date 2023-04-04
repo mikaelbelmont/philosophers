@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:14 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/03 16:37:12 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/03 22:03:31 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int checknum(char *arg)
 int	main(int ac, char **av)
 {
 	t_data	d;
+	t_table	*table;
 	int	i;
 
 	i = ac - 1;
@@ -56,10 +57,11 @@ int	main(int ac, char **av)
 		}
 		i--;
 	}
-	if (ft_init(&d, ac, av) == -1)
+	table = ft_init(&d, ac, av);
+	if (table == 0)
 		return (0);
 	if (d.philo_num > 1)
-		if (work(&d))
+		if (work(&d, table))
 			return (printf("Error while creating the threads\n"));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:17 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/03 17:46:43 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/03 21:54:29 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,13 +130,13 @@ void	sleeping(long long time, t_data *data)
 	}
 }
 
-int	work(t_data *data)
+int	work(t_data *data, t_table *table)
 {
 	int		i;
-	t_table	*table;
+	//t_table	*table;
 
 	i = -1;
-	table = malloc(sizeof(t_table));
+	//table = malloc(sizeof(t_table));
 	data->first_timestamp = times();
 	while (++i < data->philo_num)
 	{
