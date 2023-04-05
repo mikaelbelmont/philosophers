@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:09 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/04 23:45:58 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:30:53 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,25 @@ typedef struct s_table
 	t_data			data;
 }	t_table;
 
-t_table		*ft_init(t_data *d, int ac, char **av);
-t_table		*initphil(t_table *table, t_data *d);
-int			ft_checker(t_data *d, int ac);
+//init
 int			initmut(t_data *d);
+int			ft_checker(t_data *d, int ac);
+t_table		*initphil(t_table *table, t_data *d);
+void		*onephilo(void *tm_die);
+t_table		*ft_init(t_data *d, int ac, char **av);
+
+//utils
+int			ft_atoi(const char *str);
 long long	times(void);
 long long	time_diff(long long past, long long pres);
-int			ft_atoi(const char *str);
-void		sleeping(long long time, t_data *data);
 void		printer(t_data *data, long long int timestamp, int id, char *string);
 void		exit_launcher(t_data *data, t_table *table);
-int			work(t_data *data, t_table *table);
-void		check_dead(t_data *d, t_table *t);
-void		*philo_thread(void *voidphil);
+
+//working
 void		philo_eat(t_table *table);
-void		*onephilo(void *tm_die);
+void		*philo_thread(void *voidphil);
+int			check_dead(t_data *d, t_table *t);
+void		sleeping(long long time, t_data *data);
+int			work(t_data *data, t_table *table);
 
 #endif

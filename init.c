@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/04 20:31:11 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:00:36 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ t_table	*initphil(t_table *table, t_data *d)
 	table = malloc(sizeof(t_table) * d->philo_num);
 	if (!table)
 		return (NULL);
+	d->first_timestamp = times();
 	while (++i < d->philo_num)
 	{
 		table[i].id = i;
