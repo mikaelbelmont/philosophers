@@ -6,13 +6,13 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:17 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/05 17:23:42 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/05 22:43:07 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_eat(t_table *table)
+int	philo_eat(t_table *table)
 {
 	t_data	data;
 
@@ -20,15 +20,20 @@ void	philo_eat(t_table *table)
 	pthread_mutex_lock(&table->data.forks[data.fork_left]);
 	printer(&data, data.first_timestamp, table->id, "has taken a fork");
 	pthread_mutex_unlock(&table->data.forks[data.fork_left]);
+	if (check_dead(&data, table))
+		return (1);
 	pthread_mutex_lock(&table->data.forks[data.fork_right]);
 	printer(&data, data.first_timestamp, table->id, "has taken a fork");
 	pthread_mutex_unlock(&table->data.forks[data.fork_right]);
+	if (check_dead(&data, table))
+		return (1);
 	printer(&data, data.first_timestamp, table->id, "is eating");
-	table->last_meal_t = times();
-	pthread_mutex_lock(&(data.util));
 	(table->x_ate)++;
-	pthread_mutex_unlock(&(data.util));
+	//pthread_mutex_lock(&(data.util));
+	table->last_meal_t = times() - table->start;
+	//pthread_mutex_unlock(&(data.util));
 	sleeping(data.eat_time, &data);
+	return (0);
 }
 
 void	*philo_thread(void *voidphil)
@@ -40,12 +45,13 @@ void	*philo_thread(void *voidphil)
 	data = table->data;
 	if (table->id % 2)
 		usleep(10000);
-	pthread_mutex_lock(&(data.util));
+	//pthread_mutex_lock(&(data.util));
 	//table->last_meal_t = times();
-	pthread_mutex_lock(&(data.util));
+	//pthread_mutex_unlock(&(data.util));
 	while (!check_dead(&data, table))
 	{
-		philo_eat(table);
+		if (philo_eat(table))
+			return (NULL);
 		if (data.all_ate)
 			break ;
 		printer(&data, data.first_timestamp, table->id, "is sleeping");
@@ -64,9 +70,11 @@ int		check_dead(t_data *d, t_table *t)
 	pthread_mutex_unlock(&(d->util2));
 	if (death)
 		return (1);
-	if (time_diff(t->last_meal_t, times()) > d->die_time)
+	//printf("%lld %lld - %lld > %d\n", t->last_meal_t, times(), t->start, d->die_time);
+	//pthread_mutex_lock(&(d->util));
+	if (time_diff(t->last_meal_t, (times() - t->start)) >= d->die_time)
 	{
-		printf("%lldaqui\n\n\n", t->last_meal_t);
+		//printf("%lldaqui\n\n\n", t->last_meal_t);
 		pthread_mutex_lock(&(d->deathlock));
 		d->death = 1;
 		if (d->death == 1)
@@ -74,6 +82,7 @@ int		check_dead(t_data *d, t_table *t)
 		pthread_mutex_unlock(&(d->deathlock));
 		return (1);
 	}
+	//pthread_mutex_unlock(&(d->util));
 	return (0);
 }
 
@@ -100,8 +109,10 @@ int	work(t_data *data, t_table *table)
 
 	i = -1;
 	//data->first_timestamp = times();
+	table->start = times();
 	while (++i < data->philo_num)
 	{
+		//printf("aquiiiiii\n");
 		table[i].last_meal_t = 0;
 		if (pthread_create(&(table[i].thread_id), NULL, \
 		philo_thread, (table + i)))
