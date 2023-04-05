@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/04 16:28:38 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/04 20:31:11 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_table	*initphil(t_table *table, t_data *d)
 	int i;
 	
 	i = -1;
-	table = malloc(sizeof(t_table));
+	table = malloc(sizeof(t_table) * d->philo_num);
 	if (!table)
 		return (NULL);
 	while (++i < d->philo_num)
@@ -126,6 +126,8 @@ t_table	*ft_init(t_data *d, int ac, char **av)
 	if (d->philo_num == 1)
 	{
 		table = malloc(sizeof(t_table));
+		if (!table)
+			return (NULL);
 		pthread_create(&(table[0].thread_id), NULL, onephilo, &(d->die_time));
 		pthread_join(table[0].thread_id, NULL);
 		usleep(500);

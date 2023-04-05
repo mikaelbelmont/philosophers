@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:12 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/04 17:36:41 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/05 00:01:05 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,11 @@ long long	time_diff(long long past, long long pres)
 	return (pres - past);
 }
 
-void	printer(t_data *data, int id, char *string)
+void	printer(t_data *data, long long int timestamp, int id, char *string)
 {
+	printf("\n\n\neeeeeeeeeeeeee%lld\n\n\n", timestamp);
 	pthread_mutex_lock(&(data->writing));
-	printf("%lli ", times() - data->first_timestamp);
+	printf("%lli ", (times() - timestamp));
 	printf("%i ", id + 1);
 	printf("%s\n", string);
 	pthread_mutex_unlock(&(data->writing));
