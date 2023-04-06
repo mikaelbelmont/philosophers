@@ -6,57 +6,53 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:17 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/05 22:43:07 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/06 19:39:27 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	philo_eat(t_table *table)
+int	philo_eat(t_data *data, t_table *table)
 {
-	t_data	data;
+	// t_data	data;
 
-	data = table->data;
-	pthread_mutex_lock(&table->data.forks[data.fork_left]);
-	printer(&data, data.first_timestamp, table->id, "has taken a fork");
-	pthread_mutex_unlock(&table->data.forks[data.fork_left]);
-	if (check_dead(&data, table))
+	// data = table->data;
+	pthread_mutex_lock(&table->data->forks[data->fork_left]);
+	printer(data, data->first_timestamp, table->id, "has taken a fork");
+	if (check_dead(data, table))
 		return (1);
-	pthread_mutex_lock(&table->data.forks[data.fork_right]);
-	printer(&data, data.first_timestamp, table->id, "has taken a fork");
-	pthread_mutex_unlock(&table->data.forks[data.fork_right]);
-	if (check_dead(&data, table))
+	pthread_mutex_lock(&table->data->forks[data->fork_right]);
+	printer(data, data->first_timestamp, table->id, "has taken a fork");
+	if (check_dead(data, table))
 		return (1);
-	printer(&data, data.first_timestamp, table->id, "is eating");
+	printer(data, data->first_timestamp, table->id, "is eating");
 	(table->x_ate)++;
-	//pthread_mutex_lock(&(data.util));
-	table->last_meal_t = times() - table->start;
-	//pthread_mutex_unlock(&(data.util));
-	sleeping(data.eat_time, &data);
+	pthread_mutex_lock(&(data->allate));
+	table->last_meal_t = times();
+	pthread_mutex_unlock(&(data->allate));
+	sleeping(data->eat_time, data);
+	pthread_mutex_unlock(&table->data->forks[data->fork_right]);
+	pthread_mutex_unlock(&table->data->forks[data->fork_left]);
 	return (0);
 }
 
 void	*philo_thread(void *voidphil)
 {
 	t_table			*table;
-	t_data			data;
 
 	table = (t_table *)voidphil;
-	data = table->data;
 	if (table->id % 2)
 		usleep(10000);
-	//pthread_mutex_lock(&(data.util));
 	//table->last_meal_t = times();
-	//pthread_mutex_unlock(&(data.util));
-	while (!check_dead(&data, table))
+	while (!check_dead(table->data, table))
 	{
-		if (philo_eat(table))
+		if (philo_eat(table->data, table))
 			return (NULL);
-		if (data.all_ate)
+		if (table->data->all_ate)
 			break ;
-		printer(&data, data.first_timestamp, table->id, "is sleeping");
-		sleeping(data.sleep_time, &data);
-		printer(&data, data.first_timestamp, table->id, "is thinking");
+		printer(table->data, table->data->first_timestamp, table->id, "is sleeping");
+		sleeping(table->data->sleep_time, table->data);
+		printer(table->data, table->data->first_timestamp, table->id, "is thinking");
 	}
 	return (NULL);
 }
@@ -64,25 +60,25 @@ void	*philo_thread(void *voidphil)
 int		check_dead(t_data *d, t_table *t)
 {
 	int	death;
+	long long ts;
 	
-	pthread_mutex_lock(&(d->util2));
 	death = d->death;
-	pthread_mutex_unlock(&(d->util2));
+	pthread_mutex_lock(&(d->allate));
+	ts = t->last_meal_t;
+	pthread_mutex_unlock(&(d->allate));
 	if (death)
 		return (1);
 	//printf("%lld %lld - %lld > %d\n", t->last_meal_t, times(), t->start, d->die_time);
-	//pthread_mutex_lock(&(d->util));
-	if (time_diff(t->last_meal_t, (times() - t->start)) >= d->die_time)
+	//printf("\n\n%lld\n\n\n", time_diff(ts, (times() - t->start)));
+	if (time_diff(ts, times()) >= d->die_time)
 	{
-		//printf("%lldaqui\n\n\n", t->last_meal_t);
 		pthread_mutex_lock(&(d->deathlock));
 		d->death = 1;
 		if (d->death == 1)
-			printer(d, d->first_timestamp, t->id, "died");
+			printer(d, t->last_meal_t, t->id, "died");
 		pthread_mutex_unlock(&(d->deathlock));
 		return (1);
 	}
-	//pthread_mutex_unlock(&(d->util));
 	return (0);
 }
 
@@ -113,12 +109,15 @@ int	work(t_data *data, t_table *table)
 	while (++i < data->philo_num)
 	{
 		//printf("aquiiiiii\n");
-		table[i].last_meal_t = 0;
+		//pthread_mutex_lock(&(data->util2));
+		//table->last_meal_t = times() - table->start;
+		//pthread_mutex_unlock(&(data->util2));
 		if (pthread_create(&(table[i].thread_id), NULL, \
 		philo_thread, (table + i)))
 			return (1);
 	}
-	check_dead(data, table);
+	while (!check_dead(data, table))
+		usleep(500);
 	exit_launcher(data, table);
 	free(table);
 	return (0);

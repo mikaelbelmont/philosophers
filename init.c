@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/05 15:00:36 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/06 19:49:11 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	initmut(t_data *d)
 {
 	int	i;
-
+	
 	i = -1;    
 	d->forks = malloc(sizeof(d) * d->philo_num);
 	while (++i >= d->philo_num)
@@ -53,14 +53,14 @@ int	ft_checker(t_data *d, int ac)
 		return (-1);
 	}
 	i++;
-	if (d->die_time >= 0)
+	if (d->die_time > 0)
 		i++;
-	if (d->eat_time >= 0)
+	if (d->eat_time > 0)
 		i++;
-	if (d->sleep_time >= 0)
+	if (d->sleep_time > 0)
 		i++;
 	if (ac == 6)
-		if (d->eat_count >= 0)
+		if (d->eat_count > 0)
 			i++;
 	if ((ac == 5 && i == 4) || (ac == 6 && i == 5))
 		return (1);
@@ -77,6 +77,7 @@ t_table	*initphil(t_table *table, t_data *d)
 	if (!table)
 		return (NULL);
 	d->first_timestamp = times();
+	//table->mutex = ;
 	while (++i < d->philo_num)
 	{
 		table[i].id = i;
@@ -91,10 +92,10 @@ t_table	*initphil(t_table *table, t_data *d)
 		// 	table[i].left_fork = (i + 1) % d->philo_num;
 		// 	table[i].right_fork = i;
 		// }
-		table->left_fork = i;
-		table->right_fork = (i + 1) % d->philo_num;
-		table[i].last_meal_t = 0;
-		table[i].data = *d;
+		table->data->fork_left = i;
+		table->data->fork_right = (i + 1) % d->philo_num;
+		table[i].last_meal_t = times();
+		table[i].data = d;
 	}
 	return (table);
 }
@@ -136,7 +137,7 @@ t_table	*ft_init(t_data *d, int ac, char **av)
 	}
 	if (ft_checker(d, ac) == -1)
 		return (NULL);
-	initmut(d);
+	table->mutex = initmut(d);
 	table = initphil(table, d);
 	return (table);
 }

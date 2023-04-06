@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:09 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/05 22:40:04 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/06 19:49:27 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,15 @@ typedef struct s_table
 {
 	int				id;
 	int				x_ate;
-	int				left_fork;
-	int				right_fork;
+	// int				left_fork;
+	// int				right_fork;
 	long long		last_meal_t;
 	pthread_t		thread_id;
-	t_data			data;
+	t_data			*data;
 
 	long long	start;
+
+	t_table		**mutex;
 	
 }	t_table;
 
@@ -78,7 +80,7 @@ void		printer(t_data *data, long long int timestamp, int id, char *string);
 void		exit_launcher(t_data *data, t_table *table);
 
 //working
-int			philo_eat(t_table *table);
+int			philo_eat(t_data *data, t_table *table);
 void		*philo_thread(void *voidphil);
 int			check_dead(t_data *d, t_table *t);
 void		sleeping(long long time, t_data *data);
