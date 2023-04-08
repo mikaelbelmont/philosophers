@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/06 19:49:11 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/07 19:36:59 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@ int	initmut(t_data *d)
 		if (pthread_mutex_init(&d->forks[i], NULL))
 			return (1);
 	}
-	if (pthread_mutex_init(&d->writing, NULL))
-		return (1);
-	if (pthread_mutex_init(&d->eating, NULL))
-		return (1);
-	if (pthread_mutex_init(&d->util, NULL))
-		return (1);
+	//if (pthread_mutex_init(&d->writing, NULL))
+	//	return (1);
+	//if (pthread_mutex_init(&d->eating, NULL))
+	//	return (1);
+	//if (pthread_mutex_init(&d->util, NULL))
+	//	return (1);
 	if (pthread_mutex_init(&d->allate, NULL))
 		return (1);
 	if (pthread_mutex_init(&d->util2, NULL))
 		return (1);
-	if (pthread_mutex_init(&d->deathlock, NULL))
-		return (1);
+	//if (pthread_mutex_init(&d->deathlock, NULL))
+	//	return (1);
 	// while (++i >= d->philo_num)
 	// {
 	// 	d[i].fork_left = &d->forks[i + 1];	
@@ -77,7 +77,7 @@ t_table	*initphil(t_table *table, t_data *d)
 	if (!table)
 		return (NULL);
 	d->first_timestamp = times();
-	//table->mutex = ;
+	table->data = d;
 	while (++i < d->philo_num)
 	{
 		table[i].id = i;
@@ -137,7 +137,8 @@ t_table	*ft_init(t_data *d, int ac, char **av)
 	}
 	if (ft_checker(d, ac) == -1)
 		return (NULL);
-	table->mutex = initmut(d);
+	pthread_mutex_init(&d->deathlock, NULL);
+	initmut(d);
 	table = initphil(table, d);
 	return (table);
 }

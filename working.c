@@ -6,11 +6,12 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:17 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/06 19:39:27 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/08 22:29:01 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
 
 int	philo_eat(t_data *data, t_table *table)
 {
@@ -42,7 +43,7 @@ void	*philo_thread(void *voidphil)
 
 	table = (t_table *)voidphil;
 	if (table->id % 2)
-		usleep(10000);
+		usleep(500);
 	//table->last_meal_t = times();
 	while (!check_dead(table->data, table))
 	{
@@ -57,16 +58,24 @@ void	*philo_thread(void *voidphil)
 	return (NULL);
 }
 
-int		check_dead(t_data *d, t_table *t)
+int		death_var(t_data *d)
 {
 	int	death;
+
+	pthread_mutex_lock(&(d->deathlock));
+	death = d->death;
+	pthread_mutex_unlock(&(d->deathlock));
+	return (death);
+}
+
+int		check_dead(t_data *d, t_table *t)
+{
 	long long ts;
 	
-	death = d->death;
 	pthread_mutex_lock(&(d->allate));
 	ts = t->last_meal_t;
 	pthread_mutex_unlock(&(d->allate));
-	if (death)
+	if (death_var(d))
 		return (1);
 	//printf("%lld %lld - %lld > %d\n", t->last_meal_t, times(), t->start, d->die_time);
 	//printf("\n\n%lld\n\n\n", time_diff(ts, (times() - t->start)));
@@ -82,21 +91,25 @@ int		check_dead(t_data *d, t_table *t)
 	return (0);
 }
 
-void	sleeping(long long time, t_data *data)
+int	sleeping(long long time, t_data *data)
 {
 	long long	i;
-	int			death;
-
-	pthread_mutex_lock(&(data->util2));
-	death = data->death;
-	pthread_mutex_unlock(&(data->util2));
+	long long	j;
+	//int			death;
+//
+	//pthread_mutex_lock(&(data->util2));
+	//death = data->death;
+	//pthread_mutex_unlock(&(data->util2));
 	i = times();
-	while (!(death))
+	j = 0;
+	while (!(death_var(data)) && j < time)
 	{
-		if (time_diff(i, times()) >= time)
-			break ;
-		usleep(50);
+		if (death_var(data))
+			return (1);
+		usleep(100);
+		j = time_diff(i, times());
 	}
+	return (j >= time);
 }
 
 int	work(t_data *data, t_table *table)

@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:09 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/06 19:49:27 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/07 19:55:19 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_table
 
 	long long	start;
 
-	t_table		**mutex;
+	//t_table		**mutex;
 	
 }	t_table;
 
@@ -83,7 +83,7 @@ void		exit_launcher(t_data *data, t_table *table);
 int			philo_eat(t_data *data, t_table *table);
 void		*philo_thread(void *voidphil);
 int			check_dead(t_data *d, t_table *t);
-void		sleeping(long long time, t_data *data);
+int		sleeping(long long time, t_data *data);
 int			work(t_data *data, t_table *table);
 
 #endif
