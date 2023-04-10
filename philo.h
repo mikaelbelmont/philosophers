@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:09 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/07 19:55:19 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/10 16:22:44 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,14 @@ struct s_data
 	int				eat_count;
 	int				death;
 	int				all_ate;
+	int				fork_lock;
+	
 	pthread_mutex_t	writing;
 	
 	pthread_mutex_t	*forks;
 	
-	// pthread_mutex_t	*fork_left;
-	// pthread_mutex_t	*fork_right;
-	
-	int				fork_left;
-	int				fork_right;
+	// int				fork_left;
+	// int				fork_right;
 
 	pthread_mutex_t	eating;
 	pthread_mutex_t	util;
@@ -53,8 +52,8 @@ typedef struct s_table
 {
 	int				id;
 	int				x_ate;
-	// int				left_fork;
-	// int				right_fork;
+	int				fork_left;
+	int				fork_right;
 	long long		last_meal_t;
 	pthread_t		thread_id;
 	t_data			*data;
@@ -85,5 +84,7 @@ void		*philo_thread(void *voidphil);
 int			check_dead(t_data *d, t_table *t);
 int		sleeping(long long time, t_data *data);
 int			work(t_data *data, t_table *table);
+
+int		death_var(t_data *d);
 
 #endif

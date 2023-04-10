@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/07 19:36:59 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/10 16:34:08 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +82,8 @@ t_table	*initphil(t_table *table, t_data *d)
 	{
 		table[i].id = i;
 		table[i].x_ate = 0;
-		// if ((i + 1) != d->philo_num)
-		// {
-		// 	table[i].right_fork = (i + 1) % d->philo_num;
-		// 	table[i].left_fork = i;
-		// }
-		// else
-		// {
-		// 	table[i].left_fork = (i + 1) % d->philo_num;
-		// 	table[i].right_fork = i;
-		// }
-		table->data->fork_left = i;
-		table->data->fork_right = (i + 1) % d->philo_num;
+		table[i].fork_left = i;
+		table[i].fork_right = (i + 1) % d->philo_num;
 		table[i].last_meal_t = times();
 		table[i].data = d;
 	}
@@ -121,6 +111,7 @@ t_table	*ft_init(t_data *d, int ac, char **av)
 	d->sleep_time = ft_atoi(av[4]);
 	d->death = 0;
 	d->all_ate = 0;
+	d->fork_lock = 0;
 	if (ac == 6)
 		d->eat_count = ft_atoi(av[5]);
 	else
