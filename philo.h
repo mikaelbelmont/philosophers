@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:09 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/10 16:22:44 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/10 17:38:33 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 
 typedef struct s_data	t_data;
 
+typedef struct s_table	t_table;
+
 struct s_data
 {
 	int				philo_num;
@@ -31,7 +33,6 @@ struct s_data
 	int				eat_count;
 	int				death;
 	int				all_ate;
-	int				fork_lock;
 	
 	pthread_mutex_t	writing;
 	
@@ -46,6 +47,7 @@ struct s_data
 	pthread_mutex_t	util2;
 	pthread_mutex_t	deathlock;
 	long long		first_timestamp;
+	t_table			*table;
 };
 
 typedef struct s_table
@@ -57,6 +59,7 @@ typedef struct s_table
 	long long		last_meal_t;
 	pthread_t		thread_id;
 	t_data			*data;
+	int				fork_lock;
 
 	long long	start;
 

@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/10 16:34:08 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/10 18:26:35 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ t_table	*initphil(t_table *table, t_data *d)
 		table[i].fork_right = (i + 1) % d->philo_num;
 		table[i].last_meal_t = times();
 		table[i].data = d;
+		table[i].fork_lock = 0;
 	}
 	return (table);
 }
@@ -110,26 +111,25 @@ t_table	*ft_init(t_data *d, int ac, char **av)
 	d->eat_time = ft_atoi(av[3]);
 	d->sleep_time = ft_atoi(av[4]);
 	d->death = 0;
-	d->all_ate = 0;
-	d->fork_lock = 0;
 	if (ac == 6)
 		d->eat_count = ft_atoi(av[5]);
 	else
 		d->eat_count = -1;
-	if (d->philo_num == 1)
-	{
-		table = malloc(sizeof(t_table));
-		if (!table)
-			return (NULL);
-		pthread_create(&(table[0].thread_id), NULL, onephilo, &(d->die_time));
-		pthread_join(table[0].thread_id, NULL);
-		usleep(500);
-		return (NULL);
-	}
+	// if (d->philo_num == 1)
+	// {
+	// 	table = malloc(sizeof(t_table));
+	// 	if (!table)
+	// 		return (NULL);
+	// 	pthread_create(&(table[0].thread_id), NULL, onephilo, &(d->die_time));
+	// 	pthread_join(table[0].thread_id, NULL);
+	// 	usleep(500);
+	// 	return (NULL);
+	// }
 	if (ft_checker(d, ac) == -1)
 		return (NULL);
 	pthread_mutex_init(&d->deathlock, NULL);
 	initmut(d);
 	table = initphil(table, d);
+	d->table = table;
 	return (table);
 }
