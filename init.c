@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/11 17:52:34 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:08:52 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ int	ft_checker(t_data *d, int ac)
 
 t_table	*initphil(t_table *table, t_data *d)
 {
-	int i;
-	
+	int	i;
+
 	i = -1;
 	table = malloc(sizeof(t_table) * d->philo_num);
 	if (!table)
@@ -105,7 +105,6 @@ t_table	*ft_init(t_data *d, int ac, char **av)
 		d->eat_count = -1;
 	if (ft_checker(d, ac) == -1)
 		return (NULL);
-	//pthread_mutex_init(&d->deathlock, NULL);
 	initmut(d);
 	table = initphil(table, d);
 	d->table = table;

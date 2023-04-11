@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,18 +6,19 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:14 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/04 16:30:14 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:08:17 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h" 
 
-int checknum(char *arg)
+int	checknum(char *arg)
 {
-	char	str[12] = "+-0123456789";
+	char	str[12];
 	size_t	i;
 	size_t	j;
 
+	str[12] = "+-0123456789";
 	i = -1;
 	if (!arg)
 		return (-1);
@@ -37,26 +37,32 @@ int checknum(char *arg)
 	return (0);
 }
 
-int	main(int ac, char **av)
+int	check_args(int ac)
 {
-	t_data	d;
-	t_table	*table;
-	int	i;
-
-	i = ac - 1;
 	if (ac < 5 || ac > 6)
 	{
 		printf("Wrong number of arguments\n");
 		return (0);
 	}
-	while (i > 0)
+	return (1);
+}
+
+int	main(int ac, char **av)
+{
+	t_data	d;
+	t_table	*table;
+	int		i;
+
+	i = ac - 1;
+	if (!check_args(ac))
+		return (0);
+	while (i-- > 0)
 	{
 		if (checknum(av[i]) == -1)
 		{
 			printf("Wrong arguments, insert only numbers\n");
 			return (0);
 		}
-		i--;
 	}
 	table = ft_init(&d, ac, av);
 	if (table == 0)
