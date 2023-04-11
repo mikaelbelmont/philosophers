@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:17 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/10 19:17:31 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:49:16 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,26 @@ void	unlock_fork(t_data *data, t_table *table, int side)
 
 int	philo_eat(t_data *data, t_table *table)
 {
-	lock_fork(data, table, table->fork_left);
-	if (check_dead(data, table))
+	int left;
+	int right;
+	
+	left = ((table->id == 0) * (table->data->philo_num - 1)) + 
+	((table->id != 0) * (table->id));
+	right = (table->id - (table->id != 0));
+	lock_fork(data, table, left);
+	if (death_var(data))
 		return (1);
-	lock_fork(data, table, table->fork_right);
-	if (check_dead(data, table))
+	lock_fork(data, table, right);
+	if (death_var(data))
 		return (1);
 	printer(data, data->first_timestamp, table->id, "is eating");
+	table->last_meal_t = times();
 	table->x_ate++;
 	//pthread_mutex_lock(&(data->allate));
 	//pthread_mutex_unlock(&(data->allate));
 	sleeping(data->eat_time, data);
-	table->last_meal_t = times() - table->start;
-	unlock_fork(data ,table, table->fork_left);
-	unlock_fork(data ,table, table->fork_right);
+	unlock_fork(data ,table, left);
+	unlock_fork(data ,table, right);
 	return (0);
 }
 
@@ -69,9 +75,13 @@ void	*philo_thread(void *voidphil)
 			return (NULL);
 		if (table->x_ate == table->data->eat_count)
 			break ;
-		printer(table->data, table->data->first_timestamp, table->id, "is sleeping");
-		sleeping(table->data->sleep_time, table->data);
-		printer(table->data, table->data->first_timestamp, table->id, "is thinking");
+		if (!death_var(table->data))
+		{
+			printer(table->data, table->data->first_timestamp, table->id, "is sleeping");
+			sleeping(table->data->sleep_time, table->data);
+		}
+		if (!death_var(table->data))
+			printer(table->data, table->data->first_timestamp, table->id, "is thinking");
 	}
 	return (NULL);
 }

@@ -61,7 +61,7 @@ int	main(int ac, char **av)
 	table = ft_init(&d, ac, av);
 	if (table == 0)
 		return (0);
-	if (d.philo_num > 1)
+	if (d.philo_num >= 1)
 		if (work(&d, table))
 			return (printf("Error while creating the threads\n"));
 	return (0);

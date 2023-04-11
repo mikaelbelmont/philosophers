@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/10 18:26:35 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:52:34 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,20 @@
 int	initmut(t_data *d)
 {
 	int	i;
-	
-	i = -1;    
-	d->forks = malloc(sizeof(d) * d->philo_num);
-	while (++i >= d->philo_num)
+
+	i = -1;
+	d->forks = malloc(sizeof(t_data) * d->philo_num);
+	while (++i <= d->philo_num)
 	{
 		if (pthread_mutex_init(&d->forks[i], NULL))
 			return (1);
 	}
-	//if (pthread_mutex_init(&d->writing, NULL))
-	//	return (1);
-	//if (pthread_mutex_init(&d->eating, NULL))
-	//	return (1);
-	//if (pthread_mutex_init(&d->util, NULL))
-	//	return (1);
+	if (pthread_mutex_init(&d->writing, NULL))
+		return (1);
 	if (pthread_mutex_init(&d->allate, NULL))
 		return (1);
-	if (pthread_mutex_init(&d->util2, NULL))
+	if (pthread_mutex_init(&d->deathlock, NULL))
 		return (1);
-	//if (pthread_mutex_init(&d->deathlock, NULL))
-	//	return (1);
-	// while (++i >= d->philo_num)
-	// {
-	// 	d[i].fork_left = &d->forks[i + 1];	
-	// }
 	return (0);
 }
 
@@ -82,8 +72,6 @@ t_table	*initphil(t_table *table, t_data *d)
 	{
 		table[i].id = i;
 		table[i].x_ate = 0;
-		table[i].fork_left = i;
-		table[i].fork_right = (i + 1) % d->philo_num;
 		table[i].last_meal_t = times();
 		table[i].data = d;
 		table[i].fork_lock = 0;
@@ -115,19 +103,9 @@ t_table	*ft_init(t_data *d, int ac, char **av)
 		d->eat_count = ft_atoi(av[5]);
 	else
 		d->eat_count = -1;
-	// if (d->philo_num == 1)
-	// {
-	// 	table = malloc(sizeof(t_table));
-	// 	if (!table)
-	// 		return (NULL);
-	// 	pthread_create(&(table[0].thread_id), NULL, onephilo, &(d->die_time));
-	// 	pthread_join(table[0].thread_id, NULL);
-	// 	usleep(500);
-	// 	return (NULL);
-	// }
 	if (ft_checker(d, ac) == -1)
 		return (NULL);
-	pthread_mutex_init(&d->deathlock, NULL);
+	//pthread_mutex_init(&d->deathlock, NULL);
 	initmut(d);
 	table = initphil(table, d);
 	d->table = table;
