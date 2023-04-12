@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:17 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/11 22:11:05 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:37:15 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*philo_thread(void *voidphil)
 
 	table = (t_table *)voidphil;
 	if (table->id % 2)
-		usleep(10000);
+		usleep(5000);
 	while (!death_var(table->data))
 	{
 		if (philo_eat(table->data, table))
@@ -52,6 +52,7 @@ int	check_dead(t_data *d, t_table *t)
 {
 	if (death_var(d))
 		return (1);
+	usleep(500);
 	if (time_diff(t->last_meal_t, times()) >= d->die_time)
 	{
 		pthread_mutex_lock(&(d->deathlock));

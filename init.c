@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:16 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/11 22:08:52 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:38:53 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,12 @@ t_table	*ft_init(t_data *d, int ac, char **av)
 	d->die_time = ft_atoi(av[2]);
 	d->eat_time = ft_atoi(av[3]);
 	d->sleep_time = ft_atoi(av[4]);
+	if (d->philo_num == -1 || d->die_time == -1 || d->eat_time == -1 \
+		|| d->sleep_time == -1)
+	{
+		printf("Wrong number of arguments\n");
+		return (0);
+	}
 	d->death = 0;
 	if (ac == 6)
 		d->eat_count = ft_atoi(av[5]);

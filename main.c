@@ -6,7 +6,7 @@
 /*   By: mbarreto <mbarreto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:10:14 by mbarreto          #+#    #+#             */
-/*   Updated: 2023/04/11 22:08:17 by mbarreto         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:40:34 by mbarreto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	checknum(char *arg)
 {
-	char	str[12];
+	char	*str;
 	size_t	i;
 	size_t	j;
 
-	str[12] = "+-0123456789";
+	str = "0123456789";
 	i = -1;
 	if (!arg)
 		return (-1);
@@ -56,13 +56,14 @@ int	main(int ac, char **av)
 	i = ac - 1;
 	if (!check_args(ac))
 		return (0);
-	while (i-- > 0)
+	while (i > 0)
 	{
 		if (checknum(av[i]) == -1)
 		{
 			printf("Wrong arguments, insert only numbers\n");
 			return (0);
 		}
+		i--;
 	}
 	table = ft_init(&d, ac, av);
 	if (table == 0)
